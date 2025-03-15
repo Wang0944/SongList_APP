@@ -1,3 +1,4 @@
+# The purpose of this class is to obtain songs on DeezerAPI through the interface
 import requests
 
 from models.song import Song
