@@ -1,9 +1,24 @@
 from flask import Flask
-from controllers import song_controller, user_controller, playlist_controller
+from flask_login import LoginManager
+from controllers.user_controller import auth_bp
+from controllers.song_controller import songs_bp
+from models.user import User
 
 app = Flask(__name__)
+app.secret_key = 'dev_key'
 
 
-app.register_blueprint(song_controller.song_bp)
-app.register_blueprint(user_controller.user_bp)
-app.register_blueprint(playlist_controller.playlist_bp)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
+
+
+app.register_blueprint(auth_bp)
+app.register_blueprint(songs_bp)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get_by_username(user_id)
+
+if __name__ == '__main__':
+    app.run(debug=True)

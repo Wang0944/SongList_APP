@@ -1,31 +1,47 @@
-# We used the flask framework for development
-# and all results were returned in the form of Json
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required, current_user
+from bson import ObjectId
+from models.song import Song
 
-from flask import Blueprint, jsonify
-from services.deezer_service import DeezerAPI
+songs_bp = Blueprint('songs', __name__)
 
-# Create a Flask blueprint and manage all song-related modules in song_bp
-song_bp = Blueprint('song', __name__)
+@songs_bp.route('/dashboard')
+@login_required
+def dashboard():
+    songs = Song.get_by_user(current_user.username)
+    return render_template('dashboard.html', songs=songs)  #！！！！前段确定后需要改地址
 
-# This method gets all the songs
-@song_bp.route('/songs', methods=['GET'])
-def get_all_songs():
-    songs = DeezerAPI.get_tracks()
-    songList = []
-    for song in songs:
-        songList.append(song.__dict__)
+@songs_bp.route('/song/add', methods=['GET', 'POST'])
+@login_required
+def add_song():
+    if request.method == 'POST':
+        song = Song(
+            user_id=current_user.username,
+            title=request.form['title'],
+            artist=request.form['artist'],
+            image_url=request.form['image_url'],
+            song_url=request.form['song_url']
+        )
+        song.save()
+        return redirect(url_for('songs.dashboard'))
+    return render_template('song_form.html')   #！！！！前段确定后需要改地址
 
-    return jsonify(songList)
+@songs_bp.route('/song/edit/<song_id>', methods=['GET', 'POST'])
+@login_required
+def edit_song(song_id):
+    if request.method == 'POST':
+        updates = {
+            'title': request.form['title'],
+            'artist': request.form['artist'],
+            'image_url': request.form['image_url'],
+            'song_url': request.form['song_url']
+        }
+        Song.update(song_id, updates)
+        return redirect(url_for('songs.dashboard'))
+    return render_template('song_form.html')   #！！！！前段确定后需要改地址
 
-
-# This method is to search by artist name and get the results
-@song_bp.route('/songs/search/<artist>')
-def search_songs(artist):
-    songs = DeezerAPI.get_tracks()
-    filtered_songs = []
-    for song in songs:
-        if artist.lower() in song.name.lower():
-            filtered_songs.append(song.__dict__)
-
-    return jsonify(filtered_songs)
-
+@songs_bp.route('/song/delete/<song_id>')
+@login_required
+def delete_song(song_id):
+    Song.delete(song_id)
+    return redirect(url_for('songs.dashboard'))
