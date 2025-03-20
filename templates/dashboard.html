@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #0062cc, #004085); /* Gradient background from lighter to darker blue */
+            color: white; /* Set text color to white for better readability */
+            height: 100vh; /* Full view height */
+            display: flex;
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+        }
+        .container {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black to allow background to show through */
+            border-radius: 8px; /* Rounded corners for a softer look */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            width: 100%; /* Full width */
+            max-width: 600px; /* Maximum width to contain the elements */
+        }
+        .btn-primary {
+            background-color: #0056b3; /* Slightly darker blue for primary button */
+            border-color: #004085; /* Dark blue border for a cohesive look */
+        }
+        .btn-secondary {
+            background-color: #6c757d; /* Bootstrap secondary gray for contrast */
+            border-color: #545b62;
+        }
+        a, a:hover, a:focus {
+            color: #b8daff; /* Light blue links for a pop of color */
+            text-decoration: none; /* Removes underline from links */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Dashboard</h2>
+        <a href="{{ url_for('songs.add_song') }}" class="btn btn-primary">Add Song</a>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary">Logout</a>
+        <!-- Display songs here -->
+    </div>
+</body>
+</html>

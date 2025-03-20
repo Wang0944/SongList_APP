@@ -1,0 +1,11 @@
+1.install and start "docker destop"
+2. in cmd, cd to project folder and run "docker-compose up -d"
+
+
+Additionally, you can do the following
+check db:
+docker exec -it my_mongodb mongosh -u admin -p password
+use mydatabase
+show collections
+db.users.find()
+db.songs.find()

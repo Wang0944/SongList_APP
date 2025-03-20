@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Song</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, rgba(58, 58, 58, 0.8) 0%, rgba(0, 0, 0, 0.85) 100%), url('https://cdn.jsdelivr.net/gh/webexperiment/info/patterns/dark_embroidery.png'); /* Adding a pattern on a gradient background */
+            color: white; /* Set text color to white for better readability */
+            background-size: cover; /* Ensure the background covers the entire body */
+            height: 100vh; /* Full view height */
+            display: flex;
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+        }
+        .container {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black to allow background to show through */
+            border-radius: 8px; /* Rounded corners for a softer look */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            width: 100%; /* Full width */
+            max-width: 600px; /* Maximum width to contain the elements */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .item {
+            flex-grow: 1;
+        }
+        .item:nth-child(2) {
+            width: 100%; /* Ensure full width for artist field */
+        }
+        .form-control {
+            background-color: #222; /* Even darker form backgrounds for contrast */
+            border: 1px solid #444; /* Lighter border for visibility */
+            color: white; /* White text inside inputs */
+        }
+        .btn-primary {
+            background-color: #007bff; /* Bootstrap primary blue */
+            border-color: #007bff;
+        }
+        .btn-secondary {
+            background-color: #6c757d; /* Bootstrap secondary gray */
+            border-color: #6c757d;
+        }
+        .form-label {
+            color: #ccc; /* Lighter grey for labels to make them stand out */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add New Song</h2>
+        <form action="{{ url_for('songs.add_song') }}" method="POST">
+            <div class="item">
+                <label for="name" class="form-label">Title</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="item">
+                <label for="artist" class="form-label">Artist</label>
+                <input type="text" class="form-control" id="artist" name="artist" required>
+            </div>
+            <div class="item">
+                <label for="image" class="form-label">Image URL</label>
+                <input type="url" class="form-control" id="image" name="image">
+            </div>
+            <div class="item">
+                <label for="link" class="form-label">Song URL</label>
+                <input type="url" class="form-control" id="link" name="link" required>
+            </div>
+            <div class="item" style="width: 100%;">
+                <button type="submit" class="btn btn-primary">Add Song</button>
+                <a href="{{ url_for('songs.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

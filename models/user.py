@@ -4,34 +4,53 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 # Simplifying Flask user management
 from .database import MongoDB
+from bson import ObjectId
 
 
 class User(UserMixin):
-    def __init__(self, email, username, password):
-        self.email = email
+    def __init__(self, username, email, password, _id=None):
         self.username = username
-        self.password = generate_password_hash(password)
-
+        self.email = email
+        self.password_hash = generate_password_hash(password)
+        self._id = _id
 
     def save(self):
         db = MongoDB.get_db()
-        db.users.insert_one({
-            'username': self.username,
+        result = db.users.insert_one({
+            'name': self.username,  # 改为 'name' 以匹配初始化脚本
             'email': self.email,
-            'password_hash': self.password_hash
+            'password': self.password_hash,
+            'songs': []
         })
+        self._id = result.inserted_id
 
     @staticmethod
     def get_by_username(username):
         db = MongoDB.get_db()
-        user_data = db.users.find_one({'username': username})
+        user_data = db.users.find_one({'name': username})
         if user_data:
             return User(
-                username=user_data['username'],
+                username=user_data['name'],
                 email=user_data['email'],
-                password=user_data['password_hash']
+                password=user_data['password'],
+                _id=user_data['_id']
             )
         return None
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def get_id(self):
+        return str(self._id)
+
+    @staticmethod
+    def get_by_id(user_id):
+        db = MongoDB.get_db()
+        user_data = db.users.find_one({'_id': ObjectId(user_id)})
+        if user_data:
+            return User(
+                username=user_data['name'],
+                email=user_data['email'],
+                password=user_data['password'],
+                _id=user_data['_id']
+            )

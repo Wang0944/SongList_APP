@@ -18,7 +18,15 @@ app.register_blueprint(songs_bp)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get_by_username(user_id)
+    return User.get_by_id(user_id)
+
+@app.route('/')
+def home():
+    return "Welcome to the Homepage! Go to /dashboard"
+
+@app.route('/dashboard')
+def dashboard():
+    return "This is the Dashboard!"
 
 if __name__ == '__main__':
     app.run(debug=True)
