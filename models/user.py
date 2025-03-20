@@ -17,7 +17,7 @@ class User(UserMixin):
     def save(self):
         db = MongoDB.get_db()
         result = db.users.insert_one({
-            'name': self.username,  # 改为 'name' 以匹配初始化脚本
+            'name': self.username,
             'email': self.email,
             'password': self.password_hash,
             'songs': []
