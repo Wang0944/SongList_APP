@@ -19,7 +19,7 @@ class User(UserMixin):
         result = db.users.insert_one({
             'name': self.username,
             'email': self.email,
-            'password': self.password,
+            'password': self.password, #save as plain text
             'songs': []
         })
         self._id = result.inserted_id
