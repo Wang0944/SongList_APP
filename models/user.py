@@ -11,7 +11,7 @@ class User(UserMixin):
     def __init__(self, username, email, password, _id=None):
         self.username = username
         self.email = email
-        self.password_hash = generate_password_hash(password)
+        self.password = password
         self._id = _id
 
     def save(self):
@@ -19,7 +19,7 @@ class User(UserMixin):
         result = db.users.insert_one({
             'name': self.username,
             'email': self.email,
-            'password': self.password_hash,
+            'password': self.password,
             'songs': []
         })
         self._id = result.inserted_id
@@ -38,7 +38,7 @@ class User(UserMixin):
         return None
 
     def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return self.password == password  # Direct string comparison
 
     def get_id(self):
         return str(self._id)

@@ -20,13 +20,26 @@ def register():
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = User.get_by_username(request.form['username'])
-        if user and user.verify_password(request.form['password']):
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        print(f"Received login attempt: username={username}")  # Debugging
+
+        user = User.get_by_username(username)
+        print(f"User found in DB: {user}")  # Check if user exists
+
+        if user and user.verify_password(password):
+            print("Password verified successfully!")
             login_user(user)
-            print("Login successful! Redirecting to dashboard.")
+            print(f"Login successful! Redirecting to {url_for('songs.dashboard')}")
             return redirect(url_for('songs.dashboard'))
-        flash('Invalid credentials')
+        else:
+            print("Login failed! Invalid credentials.")
+
+        flash("Invalid username or password", "danger")
+    
     return render_template('login.html')
+
 
 @auth_bp.route('/logout')
 @login_required
