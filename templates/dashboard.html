@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
             background: linear-gradient(to bottom right, #0062cc, #004085); /* Gradient background from lighter to darker blue */
@@ -43,49 +42,6 @@
         <a href="{{ url_for('songs.add_song') }}" class="btn btn-primary">Add Song</a>
         <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary">Logout</a>
         <!-- Display songs here -->
-            <!-- Check if the user has any songs -->
-        {% if songs %}
-        <h3 class="mt-4">Your Songs</h3>
-        <ul class="list-group">
-            {% for song in songs %}
-            <li class="list-group-item bg-dark text-white d-flex align-items-center justify-content-between">
-                <!-- Song Info -->
-                <div class="d-flex align-items-center">
-                    <img src="{{ song.image }}" alt="{{ song.name }}" class="img-thumbnail me-3" style="width: 50px; height: 50px;">
-                    <div>
-                        <strong>{{ song.name }}</strong> 
-                        <br>{{ song.artist }}
-                    </div>
-                </div>
-            
-                <!-- Play + Dropdown -->
-                <div class="d-flex align-items-center">
-                    <a href="{{ song.link }}" target="_blank" class="btn btn-sm btn-light me-2">Play</a>
-            
-                    <!-- Dropdown -->
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-secondary" type="button" id="dropdownMenu{{ loop.index }}" data-bs-toggle="dropdown" aria-expanded="false">
-                            ⋮  <!-- Three dots without a dropdown triangle -->
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu{{ loop.index }}">
-                            <li>
-                                <a class="dropdown-item" href="{{ url_for('songs.update_song', song_id=song._id|string) }}">Modify</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="{{ url_for('songs.delete_song', song_id=song._id|string) }}">Delete</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            
-            
-            {% endfor %}
-        </ul>
-        
-        {% else %}
-            <p class="mt-4">You have no songs added yet.</p>
-        {% endif %}
     </div>
 </body>
 </html>

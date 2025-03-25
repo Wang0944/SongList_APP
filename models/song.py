@@ -31,22 +31,6 @@ class Song:
         return list(db.songs.find({'createdBy': ObjectId(user_id)}))
 
     @staticmethod
-    def get_by_id(song_id):
-        #Retrieve a song by its ID.
-        db = MongoDB.get_db()
-        song_data = db.songs.find_one({'_id': ObjectId(song_id)})
-        if song_data:
-            return Song(
-                user_id=song_data.get('createdBy'),
-                name=song_data.get('name'),
-                artist=song_data.get('artist'),
-                link=song_data.get('link'),
-                image=song_data.get('image'),
-                _id=song_data.get('_id')
-            )
-        return None
-
-    @staticmethod
     def update(song_id, updates):
         db = MongoDB.get_db()
         db.songs.update_one({'_id': ObjectId(song_id)}, {'$set': updates})
